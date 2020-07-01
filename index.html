@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>BoolFlix</title>
+</head>
+<body>
+
+  <!-- Ricerca -->
+  <header>
+    <div class="titolo">BoolFlix</div>
+    <div class="ricerca">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Scrivi il film da cercare">
+      <button class="ricerca">Cerca</button>
+    </div>
+
+  </header>
+  <main>
+    <div class="risultatoRicerca">
+
+    </div>
+  </main>
+
+
+  <!-- Template handlebars -->
+  <script id="film-template" type="text/x-handlebars-template">
+    <div class="bloccoFilm">
+      <h1>Titolo: {{titolo}}</h1>
+      <h2>Titolo Originale: {{titoloOriginale}}</h2>
+      <p>Lingua: {{lingua}}</p>
+      <p>Voto: {{voto}}</p>
+
+    </div>
+  </script>
+
+  <!-- Connessione JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>

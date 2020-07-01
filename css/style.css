@@ -1,0 +1,74 @@
+/* Reset generale */
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: ;
+}
+/* Sfondo sito */
+body{
+  background: gray;
+}
+
+/* Header */
+header{
+  background: black;
+  max-width: 100%;
+  height: 80px;
+}
+.titolo{
+  color: white;
+  font-size: 32px;
+  padding: 20px 20px 0px 10px;
+  width: 50%;
+  float: left;
+}
+div.ricerca{
+  display: flex;
+  float: right;
+  width: 33%;
+  height: 45px;
+  padding: 5px;
+  align-items: center;
+  float: right;
+  margin: 20px;
+}
+
+.ricerca input{
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: none;
+  border: 1px solid lightgray;
+  border-left: none;
+  font-size: 14px;
+}
+
+.ricerca input:focus{
+  border: 3px solid red;
+  border-radius: 3px;
+}
+
+.ricerca i{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  height: 100%;
+  min-width: 50px;
+  text-align: center;
+  border: 1px solid lightgray;
+  border-right: none;
+  background: white;
+}
+button.ricerca{
+  height: 105%;
+  width: 90px;
+}
+/* Blocco film */
+.bloccoFilm{
+  background: white;
+  border: 1px solid black;
+  padding: 20px;
+  margin: 10px 5px;
+}
