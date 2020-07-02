@@ -27,16 +27,22 @@
 
     </div>
   </main>
+<!--
+  '<i class="fas fa-star"></i>'
+  '<i class="far fa-star"></i>' -->
 
 
   <!-- Template handlebars -->
-  <script id="film-template" type="text/x-handlebars-template">
+  <script id="ricerca-template" type="text/x-handlebars-template">
     <div class="bloccoFilm">
-      <h1>Titolo: {{titolo}}</h1>
-      <h2>Titolo Originale: {{titoloOriginale}}</h2>
-      <p>Lingua: {{lingua}}</p>
-      <p>Voto: {{voto}}</p>
-
+      <img class="copertina"src="https://image.tmdb.org/t/p/w342{{immagine}}" alt="">
+      <div class="info">
+        <h1>Titolo: {{titolo}}</h1>
+        <h2>Titolo Originale: {{titoloOriginale}}</h2>
+        <p>Tipologia: {{ tipologia }}</p>
+        <p>Lingua: <img class="bandiera" src="{{lingua}}" alt=""> </p>
+        <p>Voto: {{stelle}}</p>
+      </div>
     </div>
   </script>
 
