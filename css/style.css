@@ -77,12 +77,24 @@ img.bandiera{
   width: 20px;
 }
 img.copertina{
-  height: 200px;
-  width: 200px;
+  min-height: 200px;
+  min-width: 150px;
+  max-width: 150px;
+  max-height: 200px;
+  margin: auto 0;
 }
 .info{
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 22px;
+}
+p i.fas,
+p i.far{
+  color: orange;
+}
+p.info{
+  margin: 5px 0px;
+  padding: 0px;
+  font-size: 13px;
 }

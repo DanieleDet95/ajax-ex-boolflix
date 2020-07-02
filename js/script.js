@@ -54,18 +54,16 @@ function ricercaFilm(filmDaCercare){
         var film = data.results[i];
         console.log(film);
 
-        // Riporta la bandiera della lingua del film
-        var bandiera = rilevaBandiera(film.original_language);
-
         // Informazioni film da stampare
         var context = {
           titolo: film.title,
           titoloOriginale: film.original_title,
           tipologia: 'Film',
-          lingua: bandiera,
+          trama: film.overview,
+          lingua: rilevaBandiera(film.original_language),
           voto: film.vote_average,
           stelle: calcoloStelle(film.vote_average),
-          immagine: film.backdrop_path
+          immagine: immaginePost(film.poster_path)
         };
 
         var html = template(context);
@@ -113,18 +111,16 @@ function ricercaSerie(serieDaCercare){
         var serie = data.results[i];
         console.log(serie);
 
-        // Riporta la bandiera della lingua della serie
-        var bandiera = rilevaBandiera(serie.original_language);
-
         // Informazioni film da stampare
         var context = {
           titolo: serie.name,
           titoloOriginale: serie.original_name,
           tipologia: 'Serie TV',
-          lingua: bandiera,
+          trama: serie.overview,
+          lingua: rilevaBandiera(serie.original_language),
           voto: serie.vote_average,
           stelle: calcoloStelle(serie.vote_average),
-          immagine: serie.poster_path
+          immagine: immaginePost(serie.poster_path)
         };
 
         var html = template(context);
@@ -146,22 +142,22 @@ function ricercaSerie(serieDaCercare){
 function rilevaBandiera(lingua){
   switch (lingua) {
   case 'it' || 'IT':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/it.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/it.webp" alt="">';
     return bandiera;
   case 'en' || 'EN':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/gb.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/gb.webp" alt="">';
     return bandiera;
   case 'zh' || 'ZH':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/cn.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/cn.webp" alt="">';
     return bandiera;
   case 'fr' || 'FR':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/fr.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/fr.webp" alt="">';
     return bandiera;
   case 'de' || 'DE':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/de.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/de.webp" alt="">';
     return bandiera;
   case 'ja' || 'JA':
-    var bandiera = 'https://www.bandiere-mondo.it/data/flags/h160/jp.webp';
+    var bandiera = '<img class="bandiera" src="https://www.bandiere-mondo.it/data/flags/h160/jp.webp" alt="">';
     return bandiera;
   default:
     var bandiera = lingua;
@@ -169,6 +165,7 @@ function rilevaBandiera(lingua){
   }
 }
 
+// Calcolo stelle da stampare
 function calcoloStelle(voto){
   var stellaPiena = '<i class="fas fa-star"></i>';
   var stellaVuota = '<i class="far fa-star"></i>';
@@ -181,6 +178,16 @@ function calcoloStelle(voto){
       stelle += stellaVuota;
     }
   }
-  console.log(stelle);
   return stelle;
+}
+
+// Riporta la copertina
+function immaginePost(immagine){
+  console.log(immagine);
+  if(immagine == null){
+    immagine = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT5kTzxyN9vlsrJvuO-vKezQgkUMpeRNHU-Tg&usqp=CAU'
+  } else{
+    immagine = 'https://image.tmdb.org/t/p/w342' + immagine;
+  }
+  return immagine;
 }

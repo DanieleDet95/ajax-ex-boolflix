@@ -22,26 +22,25 @@
     </div>
 
   </header>
+
+  <!-- Risultati ricerca -->
   <main>
     <div class="risultatoRicerca">
 
     </div>
   </main>
-<!--
-  '<i class="fas fa-star"></i>'
-  '<i class="far fa-star"></i>' -->
-
 
   <!-- Template handlebars -->
   <script id="ricerca-template" type="text/x-handlebars-template">
     <div class="bloccoFilm">
-      <img class="copertina"src="https://image.tmdb.org/t/p/w342{{immagine}}" alt="">
+      <img class="copertina"src="{{immagine}}" alt="">
       <div class="info">
         <h1>Titolo: {{titolo}}</h1>
         <h2>Titolo Originale: {{titoloOriginale}}</h2>
         <p>Tipologia: {{ tipologia }}</p>
-        <p>Lingua: <img class="bandiera" src="{{lingua}}" alt=""> </p>
-        <p>Voto: {{stelle}}</p>
+        <p class="info">{{ trama }}</p>
+        <p>Lingua: {{{lingua}}}</p>
+        <p>Voto: {{{stelle}}}</p>
       </div>
     </div>
   </script>
