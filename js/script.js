@@ -1,5 +1,4 @@
 $(document).ready(function(){
-  // Chiave api   5bab49c7983aef7f99234e6642e23f03
   // Al click da tastiera invio,aggiungi il prodotto
   $('.ricerca input').keydown(
     function(event){
@@ -8,8 +7,11 @@ $(document).ready(function(){
         // Inserimento film da cercare in una variabile
         var risultatoDaCercare = $('.ricerca input').val();
 
-        ricercaFilm(risultatoDaCercare);
-        ricercaSerie(risultatoDaCercare);
+        // Reset barra ricerca
+        reset();
+
+        ricerca(risultatoDaCercare, 'film');
+        ricerca(risultatoDaCercare, 'serie');
       }
     });
 
@@ -18,28 +20,45 @@ $(document).ready(function(){
       // Inserimento film da cercare in una variabile
       var risultatoDaCercare = $('.ricerca input').val();
 
-      ricercaFilm(risultatoDaCercare);
-      ricercaSerie(risultatoDaCercare);
+      // Reset barra ricerca
+      reset();
+
+      ricerca(risultatoDaCercare, 'film');
+      ricerca(risultatoDaCercare, 'serie');
+    });
+
+    // Al mouse dentro il blocco
+    $(document).on('mouseenter','.bloccoFilm', function(){
+      $(this).find('div.info').removeClass('nascosto');
+      $(this).find('img.copertina').addClass('nascosto');
+    });
+
+    // Al mouse fuori il blocco
+    $(document).on('mouseleave','.bloccoFilm', function(){
+      $(this).find('div.info').addClass('nascosto');
+      $(this).find('img.copertina').removeClass('nascosto');
     });
 
 });
 
-// Funzione che stampa i film
-function ricercaFilm(filmDaCercare){
+// Funzione che stampa i film o serie tv
+function ricerca(risultatoDaCercare, type){
 
-  // Reset barra ricerca
-  $('.ricerca input').val('');
-  // Reset risultati precedenti
-  $('.risultatoRicerca').text('');
+  // Passare url corretto in base al tipo da cercare
+  if(type === 'film'){
+    var url = 'https://api.themoviedb.org/3/search/movie';
+  }else if(type === 'serie'){
+    var url = 'https://api.themoviedb.org/3/search/tv';
+  }
 
   // Chiamata ajax
   $.ajax({
-    url: 'https://api.themoviedb.org/3/search/movie',
+    url: url,
     method: 'GET',
 
     data:{
       api_key: '5bab49c7983aef7f99234e6642e23f03',
-      query: filmDaCercare,
+      query: risultatoDaCercare,
       language: 'it-IT'
     },
 
@@ -49,21 +68,44 @@ function ricercaFilm(filmDaCercare){
       var source = document.getElementById("ricerca-template").innerHTML;
       var template = Handlebars.compile(source);
 
-      console.log(data);
+      // Controllo input inserito riporta risultati
+      var controllo = data.results;
+      if (controllo.length <= 0) {
+        if (type == 'film') {
+          var messaggio = 'La ricerca non ha prodotto nessun film <br>';
+          $('.errore').removeClass('nascosto');
+        } else {
+          var messaggio = 'La ricerca non ha prodotto nessuna serie <br>';
+          $('.errore').removeClass('nascosto');
+        }
+      }
+      $('.errore').append(messaggio);
+
+      // Ciclo di tutti i valori ricevuti
       for (var i = 0; i < data.total_results; i++) {
-        var film = data.results[i];
-        console.log(film);
+        var risultato = data.results[i];
+
+        // In base al tipo di ricerca passare i valori corretti
+        if(type === 'film'){
+          var titolo = risultato.title;
+          var titoloOriginale = risultato.original_title;
+          var tipologia = 'Film';
+        }else if(type === 'serie'){
+          var titolo = risultato.original_name;
+          var titoloOriginale = risultato.original_name;
+          var tipologia = 'Serie tv';
+        }
 
         // Informazioni film da stampare
         var context = {
-          titolo: film.title,
-          titoloOriginale: film.original_title,
-          tipologia: 'Film',
-          trama: film.overview,
-          lingua: rilevaBandiera(film.original_language),
-          voto: film.vote_average,
-          stelle: calcoloStelle(film.vote_average),
-          immagine: immaginePost(film.poster_path)
+          titolo: titolo,
+          titoloOriginale: titoloOriginale,
+          tipologia: tipologia,
+          trama: risultato.overview,
+          lingua: rilevaBandiera(risultato.original_language),
+          voto: risultato.vote_average,
+          stelle: calcoloStelle(risultato.vote_average),
+          immagine: immaginePost(risultato.poster_path)
         };
 
         var html = template(context);
@@ -75,67 +117,21 @@ function ricercaFilm(filmDaCercare){
     },
 
     error: function(){
-      alert('Documento API non caricato correttamente');
+      var messaggio = 'Scrivere qualcosa nella barra di ricerca <br>';
+      $('.errore').removeClass('nascosto');
+      $('.errore').append(messaggio);
     }
 
   });
 }
 
-// Funzione che stampa le serie tv
-function ricercaSerie(serieDaCercare){
-
+function reset(){
   // Reset barra ricerca
   $('.ricerca input').val('');
   // Reset risultati precedenti
   $('.risultatoRicerca').text('');
-
-  // Chiamata ajax
-  $.ajax({
-    url: 'https://api.themoviedb.org/3/search/tv',
-    method: 'GET',
-
-    data:{
-      api_key: '5bab49c7983aef7f99234e6642e23f03',
-      query: serieDaCercare,
-      language: 'it-IT'
-    },
-
-    success: function(data){
-
-      // Implementazione handlebars
-      var source = document.getElementById("ricerca-template").innerHTML;
-      var template = Handlebars.compile(source);
-
-      console.log(data);
-      for (var i = 0; i < data.total_results; i++) {
-        var serie = data.results[i];
-        console.log(serie);
-
-        // Informazioni film da stampare
-        var context = {
-          titolo: serie.name,
-          titoloOriginale: serie.original_name,
-          tipologia: 'Serie TV',
-          trama: serie.overview,
-          lingua: rilevaBandiera(serie.original_language),
-          voto: serie.vote_average,
-          stelle: calcoloStelle(serie.vote_average),
-          immagine: immaginePost(serie.poster_path)
-        };
-
-        var html = template(context);
-
-        // Stampa a schermo
-        $('.risultatoRicerca').append(html);
-      }
-
-    },
-
-    error: function(){
-      alert('Documento API non caricato correttamente');
-    }
-
-  });
+  // Reset messaggio errore
+  $('.errore').text('');
 }
 
 // Riporta la bandiera della lingua passata
@@ -173,7 +169,7 @@ function calcoloStelle(voto){
   var mediaVoto = Math.ceil(voto/2);
   for (var i = 1; i <= 5; i++) {
     if(i <= mediaVoto){
-      stelle += stellaPiena;
+        stelle += stellaPiena;
     }else{
       stelle += stellaVuota;
     }
@@ -183,7 +179,6 @@ function calcoloStelle(voto){
 
 // Riporta la copertina
 function immaginePost(immagine){
-  console.log(immagine);
   if(immagine == null){
     immagine = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT5kTzxyN9vlsrJvuO-vKezQgkUMpeRNHU-Tg&usqp=CAU'
   } else{

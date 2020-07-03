@@ -1,9 +1,8 @@
-/* Reset generale */
+/* Reset genercale */
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background: ;
 }
 /* Sfondo sito */
 body{
@@ -17,7 +16,7 @@ header{
   height: 80px;
 }
 .titolo{
-  color: white;
+  color: red;
   font-size: 32px;
   padding: 20px 20px 0px 10px;
   width: 50%;
@@ -65,36 +64,76 @@ button.ricerca{
   height: 105%;
   width: 90px;
 }
-/* Blocco film */
+.risultatoRicerca{
+  display: flex;
+  flex-flow: wrap;
+  justify-content: flex-start;
+  width: 100%;
+}
+/* Blocco film/serie */
 .bloccoFilm{
   background: lightcyan;
   border: 1px solid black;
-  padding: 20px;
-  margin: 10px 5px;
-  display: flex;
+  margin: 10px 18px;
+  flex-basis: 30%;
+  height: 421px;
 }
+.bloccoFilm:hover{
+  box-shadow: 0px 0px 10px 6px white;
+}
+
+/* Immagine copertina */
+img.copertina{
+  min-height: 420px;
+  min-width: 378px;
+  max-width: 378px;
+  max-height: 420px;
+}
+
+/* Bandiera lingua */
 img.bandiera{
   width: 20px;
 }
-img.copertina{
-  min-height: 200px;
-  min-width: 150px;
-  max-width: 150px;
-  max-height: 200px;
-  margin: auto 0;
+
+/* Stelle */
+p i.fas,
+p i.far{
+  color: orange;
 }
+
+/* Info film/serie */
 .info{
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 22px;
-}
-p i.fas,
-p i.far{
-  color: orange;
+  min-width: 298px;
+  height: 100%;
+  background: black;
+  color: white;
 }
 p.info{
   margin: 5px 0px;
   padding: 0px;
   font-size: 13px;
+}
+
+/* Display visibile e nascosto */
+.nascosto{
+  display: none;
+}
+.visibile{
+  display: block;
+}
+
+/* Messaggio errore */
+.errore{
+  
+  background: red;
+  /*! width: 300px; */
+  margin: 20px;
+  padding: 40px;
+  margin: 50px auto;
+  width: 400px;
+  font-size: 25px;
 }

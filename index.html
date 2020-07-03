@@ -17,7 +17,7 @@
     <div class="titolo">BoolFlix</div>
     <div class="ricerca">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="Scrivi il film da cercare">
+      <input type="text" placeholder="Scrivi film/serie da cercare">
       <button class="ricerca">Cerca</button>
     </div>
 
@@ -28,19 +28,22 @@
     <div class="risultatoRicerca">
 
     </div>
+    <div class="errore nascosto">
+
+    </div>
   </main>
 
   <!-- Template handlebars -->
   <script id="ricerca-template" type="text/x-handlebars-template">
     <div class="bloccoFilm">
       <img class="copertina"src="{{immagine}}" alt="">
-      <div class="info">
-        <h1>Titolo: {{titolo}}</h1>
-        <h2>Titolo Originale: {{titoloOriginale}}</h2>
+      <div class="info nascosto">
+        <h2>Titolo: {{titolo}}</h2>
+        <h4>Titolo Originale: {{titoloOriginale}}</h4>
         <p>Tipologia: {{ tipologia }}</p>
-        <p class="info">{{ trama }}</p>
         <p>Lingua: {{{lingua}}}</p>
         <p>Voto: {{{stelle}}}</p>
+        <p class="info">{{ trama }}</p>
       </div>
     </div>
   </script>
