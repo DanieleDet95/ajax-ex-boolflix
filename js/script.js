@@ -30,6 +30,8 @@ $(document).ready(function(){
     // Al mouse dentro il blocco
     $(document).on('mouseenter','.bloccoFilm', function(){
       $(this).find('div.info').removeClass('nascosto');
+      $(this).find('div.info').find('h2,h4,p,div').removeClass('nascosto');
+      $(this).find('div.info').find('.trama').addClass('nascosto');
       $(this).find('img.copertina').addClass('nascosto');
     });
 
@@ -37,6 +39,12 @@ $(document).ready(function(){
     $(document).on('mouseleave','.bloccoFilm', function(){
       $(this).find('div.info').addClass('nascosto');
       $(this).find('img.copertina').removeClass('nascosto');
+    });
+
+    // Al clck sulle informazioni esce la trama
+    $(document).on('click','.info', function(){
+      $(this).find('.trama').toggleClass('nascosto');
+      $(this).children('h2,h4,p,div').toggleClass('nascosto');
     });
 
 });
@@ -64,55 +72,7 @@ function ricerca(risultatoDaCercare, type){
 
     success: function(data){
 
-      // Implementazione handlebars
-      var source = document.getElementById("ricerca-template").innerHTML;
-      var template = Handlebars.compile(source);
-
-      // Controllo input inserito riporta risultati
-      var controllo = data.results;
-      if (controllo.length <= 0) {
-        if (type == 'film') {
-          var messaggio = 'La ricerca non ha prodotto nessun film <br>';
-          $('.errore').removeClass('nascosto');
-        } else {
-          var messaggio = 'La ricerca non ha prodotto nessuna serie <br>';
-          $('.errore').removeClass('nascosto');
-        }
-      }
-      $('.errore').append(messaggio);
-
-      // Ciclo di tutti i valori ricevuti
-      for (var i = 0; i < data.total_results; i++) {
-        var risultato = data.results[i];
-
-        // In base al tipo di ricerca passare i valori corretti
-        if(type === 'film'){
-          var titolo = risultato.title;
-          var titoloOriginale = risultato.original_title;
-          var tipologia = 'Film';
-        }else if(type === 'serie'){
-          var titolo = risultato.original_name;
-          var titoloOriginale = risultato.original_name;
-          var tipologia = 'Serie tv';
-        }
-
-        // Informazioni film da stampare
-        var context = {
-          titolo: titolo,
-          titoloOriginale: titoloOriginale,
-          tipologia: tipologia,
-          trama: risultato.overview,
-          lingua: rilevaBandiera(risultato.original_language),
-          voto: risultato.vote_average,
-          stelle: calcoloStelle(risultato.vote_average),
-          immagine: immaginePost(risultato.poster_path)
-        };
-
-        var html = template(context);
-
-        // Stampa a schermo
-        $('.risultatoRicerca').append(html);
-      }
+      stampaRisultato(data ,type);
 
     },
 
@@ -132,6 +92,151 @@ function reset(){
   $('.risultatoRicerca').text('');
   // Reset messaggio errore
   $('.errore').text('');
+}
+
+// Stampa film o serie richiesta
+function stampaRisultato(data ,type){
+  // Implementazione handlebars
+  var source = document.getElementById("ricerca-template").innerHTML;
+  var template = Handlebars.compile(source);
+
+  // Controllo input inserito riporta risultati
+  var controllo = data.results;
+  if (controllo.length <= 0) {
+    if (type == 'film') {
+      var messaggio = 'La ricerca non ha prodotto nessun film <br>';
+      $('.errore').removeClass('nascosto');
+    } else {
+      var messaggio = 'La ricerca non ha prodotto nessuna serie <br>';
+      $('.errore').removeClass('nascosto');
+    }
+  }
+  $('.errore').append(messaggio);
+
+  // Ciclo di tutti i valori ricevuti
+  for (var i = 0; i < data.total_results; i++) {
+    var risultato = data.results[i];
+    console.log(risultato);
+
+    // In base al tipo di ricerca passare i valori corretti
+    if(type === 'film'){
+      var titolo = risultato.title;
+      var titoloOriginale = risultato.original_title;
+      var tipologia = 'Film';
+    }else if(type === 'serie'){
+      var titolo = risultato.original_name;
+      var titoloOriginale = risultato.original_name;
+      var tipologia = 'Serie tv';
+    }
+
+    // Informazioni film da stampare
+    var context = {
+      titolo: titolo,
+      titoloOriginale: titoloOriginale,
+      tipologia: tipologia,
+      trama: risultato.overview,
+      lingua: rilevaBandiera(risultato.original_language),
+      voto: risultato.vote_average,
+      stelle: calcoloStelle(risultato.vote_average),
+      immagine: immaginePost(risultato.poster_path),
+      oggettoId: risultato.id
+    };
+
+    var html = template(context);
+
+    // Stampa a schermo
+    $('.risultatoRicerca').append(html);
+
+    var generi = rilevaInfo(risultato.id , type);
+    console.log(generi);
+    // var attori = rilevaAttori(risultato.id , type);
+    // console.log(attori);
+  }
+
+
+}
+
+// Rileva il genere e gli attori dei film/serie tv
+function rilevaInfo(id ,type){
+
+  // Passare url corretto in base al tipo da cercare
+  if(type === 'film'){
+    var url = 'https://api.themoviedb.org/3/movie/';
+  }else if(type === 'serie'){
+    var url = 'https://api.themoviedb.org/3/tv/';
+  }
+
+  // Chiamata ajax
+  $.ajax({
+    url: url + id,
+    method: 'GET',
+
+    data:{
+      append_to_response: 'credits',
+      api_key: '5bab49c7983aef7f99234e6642e23f03',
+    },
+
+    success: function(data){
+
+      stampaInfo(data ,id);
+
+    },
+
+    error: function(){
+      var messaggio = 'Scrivere qualcosa nella barra di ricerca <br>';
+      $('.errore').removeClass('nascosto');
+      $('.errore').append(messaggio);
+    }
+
+  });
+
+}
+
+// Stampa le informazioni trovate
+function stampaInfo(data ,id){
+
+  // Prendi il blocco con l'id corrispondente alle informazioni
+  var bloccoOggetto = $('.bloccoFilm[data-id = "'+ id +'"]');
+
+  // Creazione lista generi
+  var generi = data.genres;
+  var arrayGeneri = [];
+  for (var i = 0; i < generi.length; i++) {
+    arrayGeneri += '&bull; ' + generi[i].name + '  ';
+  }
+
+  // Creazione lista attori
+  var castAttori = data.credits.cast;
+  var arrayAttori = [];
+  for (var i = 0; i < 5; i++) {
+    arrayAttori += i+1 + ' - ' + castAttori[i].name + '<br>';
+  }
+  console.log(arrayAttori);
+
+  // Creazione lista attori
+  var personaggi = data.credits.cast;
+  var arrayPersonaggi = [];
+  for (var i = 0; i < 5; i++) {
+    arrayPersonaggi += i+1 + ' - ' + personaggi[i].character + '<br> ';
+  }
+  console.log(arrayPersonaggi);
+
+
+  // Implementazione handlebars
+  var source = document.getElementById("dettagli-template").innerHTML;
+  var template = Handlebars.compile(source);
+
+  // Informazioni film da stampare
+  var context = {
+    generi: arrayGeneri,
+    attori: '<p>' + arrayAttori + '</p>',
+    personaggi: '<p>' + arrayPersonaggi + '</p>'
+  };
+
+  var html = template(context);
+
+  // Stampa a schermo
+  $(bloccoOggetto).find('.dettagli').append(html);
 }
 
 // Riporta la bandiera della lingua passata

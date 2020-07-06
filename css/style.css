@@ -7,6 +7,7 @@
 /* Sfondo sito */
 body{
   background: gray;
+  font-family: sans-serif;
 }
 
 /* Header */
@@ -17,7 +18,7 @@ header{
 }
 .titolo{
   color: red;
-  font-size: 32px;
+  font-size: 30px;
   padding: 20px 20px 0px 10px;
   width: 50%;
   float: left;
@@ -77,6 +78,7 @@ button.ricerca{
   margin: 10px 18px;
   flex-basis: 30%;
   height: 421px;
+  border-radius: 16px;
 }
 .bloccoFilm:hover{
   box-shadow: 0px 0px 10px 6px white;
@@ -88,6 +90,7 @@ img.copertina{
   min-width: 378px;
   max-width: 378px;
   max-height: 420px;
+  border-radius: 15px;
 }
 
 /* Bandiera lingua */
@@ -111,11 +114,32 @@ p i.far{
   height: 100%;
   background: black;
   color: white;
+  border-radius: 15px;
 }
 p.info{
   margin: 5px 0px;
   padding: 0px;
-  font-size: 13px;
+  font-size: 11px;
+}
+.bloccoDettagli div{
+  width: 40%;
+  margin: 10px 20px 0px 0px;
+  float: left;
+}
+
+/* Colorazione dei titoli nelle info */
+.colorato{
+  color: red;
+}
+
+/* Trama */
+.trama{
+  font-size: 14px;
+  margin: 5px 0px;
+  text-align: center;
+}
+.titoloTrama{
+  margin: 10px;
 }
 
 /* Display visibile e nascosto */
@@ -128,12 +152,10 @@ p.info{
 
 /* Messaggio errore */
 .errore{
-  
   background: red;
-  /*! width: 300px; */
   margin: 20px;
   padding: 40px;
   margin: 50px auto;
   width: 400px;
-  font-size: 25px;
+  font-size: 23px;
 }

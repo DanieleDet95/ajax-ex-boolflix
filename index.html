@@ -33,18 +33,28 @@
     </div>
   </main>
 
-  <!-- Template handlebars -->
+  <!-- Template handlebars blocco generale-->
   <script id="ricerca-template" type="text/x-handlebars-template">
-    <div class="bloccoFilm">
+    <div class="bloccoFilm" data-id='{{ oggettoId }}'>
       <img class="copertina"src="{{immagine}}" alt="">
       <div class="info nascosto">
-        <h2>Titolo: {{titolo}}</h2>
-        <h4>Titolo Originale: {{titoloOriginale}}</h4>
-        <p>Tipologia: {{ tipologia }}</p>
-        <p>Lingua: {{{lingua}}}</p>
-        <p>Voto: {{{stelle}}}</p>
-        <p class="info">{{ trama }}</p>
+        <h2><span class="colorato">Titolo:</span> {{titolo}}</h2>
+        <h4><span class="colorato">Titolo Originale:</span> {{titoloOriginale}}</h4>
+        <p><span class="colorato">Tipologia:</span> {{ tipologia }}</p>
+        <p><span class="colorato">Lingua:</span> {{{lingua}}}</p>
+        <p><span class="colorato">Voto:</span> {{{stelle}}}</p>
+        <span class="trama nascosto"><h2 class="titoloTrama"><span class="colorato">Trama</span></h2>{{ trama }}</span>
+        <div class="dettagli"></div>
       </div>
+    </div>
+  </script>
+
+  <!-- Template handlebars per attori e generi -->
+  <script id="dettagli-template" type="text/x-handlebars-template">
+    <div class="bloccoDettagli">
+      <p><span class="colorato">Genere:</span> {{{ generi }}}</p>
+      <div><span class="colorato">Attori:</span> {{{ attori }}}</div>
+      <div><span class="colorato">Personaggi:</span> {{{ personaggi }}}</div>
     </div>
   </script>
 
